@@ -1,8 +1,25 @@
 
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
 h1 {
     color: blue;
 }
 
 .error {
     color: red;
+}
+
+#weatherStats {
+    display: flex;
+    flex-direction: row;
+}
+
+.weatherCard {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
 }
