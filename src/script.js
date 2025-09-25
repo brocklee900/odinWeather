@@ -1,3 +1,6 @@
+import "./style.css";
+import rain from "./icons/rain.svg";
+
 
 const key = "CV8ZEVKQT9AYL8HWNSFFGQCEX";
 
@@ -45,7 +48,7 @@ function createWeatherDOM(data) {
     weatherCard.classList.add("weatherCard")
 
     let icon = document.createElement("img");
-    icon.src = `./icons/${data.get("icon")}.svg`;
+    icon.src = rain;
     weatherCard.appendChild(icon);
 
     data.forEach((value, key) => {
