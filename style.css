@@ -23,3 +23,8 @@ h1 {
     flex-direction: column;
     border: 1px solid black;
 }
+
+.weatherCard > img {
+    width: 100px;
+    height: 100px;
+}

@@ -2,7 +2,7 @@
 const key = "CV8ZEVKQT9AYL8HWNSFFGQCEX";
 
 async function getData(location) {
-    let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${key}`;
+    let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${key}&iconSet=icons1`;
     let error = document.querySelector(".error");
 
     try {
@@ -24,6 +24,7 @@ async function getData(location) {
 }
 
 function parseWeatherData(data) {
+    console.log(data);
     let conditions = new Map();
     conditions.set("datetime", data.datetime);
     conditions.set("conditions", data.conditions);
@@ -34,13 +35,19 @@ function parseWeatherData(data) {
     conditions.set("humidity", data.humidity); //%
     conditions.set("rainChance", data.precipprob); //%
     conditions.set("windspeed", data.windspeed); //mph
-    conditions.set("cloudcover", data.cloudcover) //%
+    conditions.set("cloudcover", data.cloudcover); //%
+    conditions.set("icon", data.icon);
     return conditions;
 };
 
 function createWeatherDOM(data) {
     let weatherCard = document.createElement("div");
     weatherCard.classList.add("weatherCard")
+
+    let icon = document.createElement("img");
+    icon.src = `./icons/${data.get("icon")}.svg`;
+    weatherCard.appendChild(icon);
+
     data.forEach((value, key) => {
         let p = document.createElement("p");
         p.textContent = `${key}: ${value}`;
