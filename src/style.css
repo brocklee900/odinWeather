@@ -16,15 +16,43 @@ h1 {
 #weatherStats {
     display: flex;
     flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .weatherCard {
     display: flex;
     flex-direction: column;
     border: 1px solid black;
+
+    width: 150px;
+    height: 250px;
 }
 
-.weatherCard > img {
+.weatherCard > .icon {
     width: 100px;
     height: 100px;
+    align-self: center;
+}
+
+.weatherCard > .day {
+    font-size: 1.5rem;
+    align-self: center;
+    font-weight: bolder;
+}
+
+.weatherCard > .datetime {
+    align-self: center;
+}
+
+.weatherCard > .temp {
+    padding: 10px 0px;
+    align-self: center;
+}
+
+.weatherCard > .conditions {
+    font-size: 1rem;
+    align-self: center;
+    text-align: center;
+    font-weight: bolder;
 }

@@ -1,4 +1,5 @@
 import "./style.css";
+import { parse, format } from 'date-fns';
 
 const key = "CV8ZEVKQT9AYL8HWNSFFGQCEX";
 
@@ -52,19 +53,42 @@ async function getImage(name) {
 }
 
 async function createWeatherDOM(data) {
+
     let weatherCard = document.createElement("div");
     weatherCard.classList.add("weatherCard")
     console.log(data);
 
     let icon = document.createElement("img");
     icon.src = await getImage(data.get("icon"));
+    icon.classList.add("icon");
     weatherCard.appendChild(icon);
 
-    data.forEach((value, key) => {
-        let p = document.createElement("p");
-        p.textContent = `${key}: ${value}`;
-        weatherCard.appendChild(p);
-    });
+    let parsedDate = parse(data.get("datetime"), 'yyyy-MM-dd', new Date());
+    let p = document.createElement("p");
+    p.textContent = format(parsedDate, 'ccc');
+    p.classList.add("day");
+    weatherCard.appendChild(p);
+
+    p = document.createElement("p");
+    p.textContent = format(parsedDate, "MM/dd/yyyy");
+    p.classList.add("datetime");
+    weatherCard.appendChild(p);
+
+    let div = document.createElement("div");
+    div.classList.add("temp");
+    p = document.createElement("p");
+    p.textContent = `L: ${data.get("tempMin")}°F`;
+    div.appendChild(p);
+
+    p = document.createElement("p");
+    p.textContent = `H: ${data.get("tempMax")}°F`;
+    div.appendChild(p);
+    weatherCard.append(div);
+
+    p = document.createElement("p");
+    p.textContent = data.get("conditions");
+    p.classList.add("conditions");
+    weatherCard.append(p);
 
     document.querySelector("#weatherStats").appendChild(weatherCard);
 }
