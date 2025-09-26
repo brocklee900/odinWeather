@@ -1,6 +1,4 @@
 import "./style.css";
-import rain from "./icons/rain.svg";
-
 
 const key = "CV8ZEVKQT9AYL8HWNSFFGQCEX";
 
@@ -27,7 +25,6 @@ async function getData(location) {
 }
 
 function parseWeatherData(data) {
-    console.log(data);
     let conditions = new Map();
     conditions.set("datetime", data.datetime);
     conditions.set("conditions", data.conditions);
@@ -43,12 +40,24 @@ function parseWeatherData(data) {
     return conditions;
 };
 
-function createWeatherDOM(data) {
+async function getImage(name) {
+    try {
+        const imageModule = await import(`./icons/${name}.svg`);
+        const imageUrl = imageModule.default;
+        return imageUrl;
+    } catch (error) {
+        console.error("Error loading image", error);
+        return undefined;
+    }
+}
+
+async function createWeatherDOM(data) {
     let weatherCard = document.createElement("div");
     weatherCard.classList.add("weatherCard")
+    console.log(data);
 
     let icon = document.createElement("img");
-    icon.src = rain;
+    icon.src = await getImage(data.get("icon"));
     weatherCard.appendChild(icon);
 
     data.forEach((value, key) => {
@@ -64,7 +73,6 @@ document.querySelector("#search").addEventListener("click", async (e) => {
     let location = document.querySelector("#location").value;
     let data = await getData(location); //wait for the response.json promise to resolve
     if (data != undefined) {
-        console.log(data.days[0]);
         data = parseWeatherData(data.days[0]);
         createWeatherDOM(data);
     };
