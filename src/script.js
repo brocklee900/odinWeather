@@ -56,7 +56,6 @@ async function createWeatherDOM(data) {
 
     let weatherCard = document.createElement("div");
     weatherCard.classList.add("weatherCard")
-    console.log(data);
 
     let icon = document.createElement("img");
     icon.src = await getImage(data.get("icon"));
@@ -93,11 +92,27 @@ async function createWeatherDOM(data) {
     document.querySelector("#weatherStats").appendChild(weatherCard);
 }
 
+function clearDisplay() {
+    let display = document.querySelector("#weatherStats");
+    while(display.lastElementChild) {
+        display.removeChild(display.lastElementChild);
+    }
+}
+
 document.querySelector("#search").addEventListener("click", async (e) => {
     let location = document.querySelector("#location").value;
     let data = await getData(location); //wait for the response.json promise to resolve
     if (data != undefined) {
-        data = parseWeatherData(data.days[0]);
-        createWeatherDOM(data);
+        clearDisplay();
+
+        for (const day of data.days.slice(0, 7)) { //get only next 7 days
+            let dayData = parseWeatherData(day);
+
+            //need to await the creation of each day so that it displays in the correct order
+            //without await, some days will load before others depending on if their icon
+            //image is already imported or not
+            await createWeatherDOM(dayData); 
+            
+        };
     };
 }); 
