@@ -15,13 +15,15 @@ body {
     color: red;
 }
 
-#weatherStats {
+#weatherCardDisplay {
     display: flex;
     flex-direction: row;
     gap: 10px;
     flex-wrap: wrap;
 }
 
+
+/* --------- Weather Card ---------- */
 .weatherCard {
     display: flex;
     flex-direction: column;
@@ -57,4 +59,34 @@ body {
     align-self: center;
     text-align: center;
     font-weight: bolder;
+}
+
+/* --------- Weather Active ---------- */
+#weatherStats {
+    display: flex;
+    flex-direction: column;
+}
+
+#weatherStats {
+    font-size: 1.75rem;
+}
+
+#weatherStats > .header {
+    display: flex;
+    gap: 25px;
+}
+
+.header > .date {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+.header > .icon {
+    height: 125px;
+    width: 125px;
+}
+
+#weatherStats > .content {
+    
 }

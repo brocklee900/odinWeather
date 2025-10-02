@@ -1,5 +1,11 @@
 import { parse, format } from 'date-fns';
 
+function clearDisplay(display) {
+    while(display.lastElementChild) {
+        display.removeChild(display.lastElementChild);
+    };
+};
+
 function parseWeatherData(data) {
     let conditions = new Map();
     conditions.set("datetime", data.datetime);
@@ -24,60 +30,51 @@ async function getImage(name) {
     } catch (error) {
         console.error("Error loading image", error);
         return undefined;
+    };
+};
+
+function createElement(elementType, text, styleClass, parent) {
+    let element = document.createElement(elementType);
+    element.textContent = text;
+    if (styleClass) {
+        element.classList.add(styleClass);
     }
-}
+    parent.appendChild(element);
+
+    return element;
+};
+
+async function createIcon(imageName, parent) {
+    let icon = document.createElement("img");
+    icon.src = await getImage(imageName);
+    icon.classList.add("icon");
+    parent.appendChild(icon);
+};
+
 
 async function createWeatherDOM(data) {
 
-    let weatherCard = document.createElement("div");
-    weatherCard.classList.add("weatherCard")
+    const weatherCard = createElement("div", "", "weatherCard", 
+        document.querySelector("#weatherCardDisplay"));
 
-    let icon = document.createElement("img");
-    icon.src = await getImage(data.get("icon"));
-    icon.classList.add("icon");
-    weatherCard.appendChild(icon);
+    await createIcon(data.get("icon"), weatherCard);
 
     let parsedDate = parse(data.get("datetime"), 'yyyy-MM-dd', new Date());
-    let p = document.createElement("p");
-    p.textContent = format(parsedDate, 'ccc');
-    p.classList.add("day");
-    weatherCard.appendChild(p);
+    createElement("p", format(parsedDate, 'ccc'), "day", weatherCard);
+    createElement("p", format(parsedDate, "MM/dd/yyyy"), "datetime", weatherCard);
 
-    p = document.createElement("p");
-    p.textContent = format(parsedDate, "MM/dd/yyyy");
-    p.classList.add("datetime");
-    weatherCard.appendChild(p);
+    let tempDiv = createElement("div", "", "temp", weatherCard);
+    createElement("p", `L: ${data.get("tempMin")}°F`, undefined, tempDiv);
+    createElement("p", `H: ${data.get("tempMax")}°F`, undefined, tempDiv);
 
-    let div = document.createElement("div");
-    div.classList.add("temp");
-    p = document.createElement("p");
-    p.textContent = `L: ${data.get("tempMin")}°F`;
-    div.appendChild(p);
+    createElement("p", data.get("condigions"), "conditions", weatherCard);
 
-    p = document.createElement("p");
-    p.textContent = `H: ${data.get("tempMax")}°F`;
-    div.appendChild(p);
-    weatherCard.append(div);
+};
 
-    p = document.createElement("p");
-    p.textContent = data.get("conditions");
-    p.classList.add("conditions");
-    weatherCard.append(p);
+async function setDisplay(data) {
+    clearDisplay(document.querySelector("#weatherCardDisplay"));
 
-    document.querySelector("#weatherStats").appendChild(weatherCard);
-}
-
-function clearDisplay() {
-    let display = document.querySelector("#weatherStats");
-    while(display.lastElementChild) {
-        display.removeChild(display.lastElementChild);
-    }
-}
-
-async function setDisplay(days) {
-    clearDisplay();
-
-    for (const day of days) {
+    for (const day of data.days.slice(0, 7)) { //get only next 7 days
         let dayData = parseWeatherData(day);
 
         //need to await the creation of each day so that it displays in the correct order
@@ -86,6 +83,6 @@ async function setDisplay(days) {
         await createWeatherDOM(dayData); 
         
     };
-}
+};
 
 export { setDisplay };

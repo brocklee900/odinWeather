@@ -28,6 +28,6 @@ document.querySelector("#search").addEventListener("click", async (e) => {
     let location = document.querySelector("#location").value;
     let data = await getData(location); //wait for the response.json promise to resolve
     if (data != undefined) {
-        setDisplay(data.days.slice(0, 7)); //get only next 7 days
+        setDisplay(data);
     };
 });
