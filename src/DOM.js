@@ -1,5 +1,9 @@
 import { parse, format } from 'date-fns';
 
+document.querySelector(".close").addEventListener("click", (e) => {
+    document.querySelector("dialog").close();
+});
+
 function clearDisplay(display) {
     while(display.lastElementChild) {
         display.removeChild(display.lastElementChild);
@@ -51,6 +55,49 @@ async function createIcon(imageName, parent) {
     parent.appendChild(icon);
 };
 
+async function displayActiveCard(data) {
+    const activeDisplay = document.querySelector("#weatherStats");
+    clearDisplay(activeDisplay);
+
+    //Header
+    let header = createElement("div", "", "header", activeDisplay);
+
+    await createIcon(data.get("icon"), header);
+
+    let dateDiv = createElement("div", "", "date", header);
+    let parsedDate = parse(data.get("datetime"), 'yyyy-MM-dd', new Date());
+    createElement("h1", format(parsedDate, 'EEEE'), undefined, dateDiv);
+    createElement("p", format(parsedDate, 'LLLL do, yyyy'), undefined, dateDiv);
+
+    createElement("p", data.get("description"), "description", header);
+
+    //Content
+    let content = createElement("div", "", "content", activeDisplay);
+
+    let stat = createElement("div", "", "stat", content);
+    await createIcon("thermometer-low", stat);
+    let tempDiv = createElement("div", "", "temp", stat);
+    createElement("p", `Low: ${data.get("tempMin")}°F`, undefined, tempDiv);
+    createElement("p", `High: ${data.get("tempMax")}°F`, undefined, tempDiv);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("weather-windy", stat);
+    createElement("p", `Wind: ${data.get("windspeed")}mph`, undefined, stat);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("water-alert-outline", stat);
+    createElement("p", `Chance of Rain: ${data.get("rainChance")}%`, undefined, stat);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("cloud-outline", stat);
+    createElement("p", `Cloud Coverage: ${data.get("cloudcover")}%`, undefined, stat);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("water-percent", stat);
+    createElement("p", `Humidity: ${data.get("humidity")}%`, undefined, stat);
+
+    document.querySelector("dialog").showModal();
+};
 
 async function createWeatherDOM(data) {
 
@@ -67,7 +114,11 @@ async function createWeatherDOM(data) {
     createElement("p", `L: ${data.get("tempMin")}°F`, undefined, tempDiv);
     createElement("p", `H: ${data.get("tempMax")}°F`, undefined, tempDiv);
 
-    createElement("p", data.get("condigions"), "conditions", weatherCard);
+    createElement("p", data.get("conditions"), "conditions", weatherCard);
+
+    weatherCard.addEventListener("click", (e) => {
+        displayActiveCard(data);
+    })
 
 };
 

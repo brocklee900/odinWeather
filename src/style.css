@@ -62,6 +62,28 @@ body {
 }
 
 /* --------- Weather Active ---------- */
+
+dialog {
+    width: 80%;
+    height: 40%;
+    position: absolute;
+    background-color: blue;
+
+    top: 50%;
+    transform: translate(0%, -50%);
+
+    padding: 15px 35px;
+}
+
+dialog > .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-image: url("./icons/window-close.svg");
+    height: 35px;
+    width: 35px;
+}
+
 #weatherStats {
     display: flex;
     flex-direction: column;
@@ -73,13 +95,8 @@ body {
 
 #weatherStats > .header {
     display: flex;
+    align-items: center;
     gap: 25px;
-}
-
-.header > .date {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
 }
 
 .header > .icon {
@@ -87,6 +104,41 @@ body {
     width: 125px;
 }
 
+.header > .date {
+    display: flex;
+    flex-direction: column;
+    width: 275px;
+}
+
+.header > .description {
+    font-size: 1.5rem;
+    width: 400px;
+}
+
 #weatherStats > .content {
-    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.content > .stat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat > img {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 20px;
+
+}
+
+.content > .temp {
+    padding: 10px 0px;
+    align-self: center;
 }
