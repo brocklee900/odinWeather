@@ -4,6 +4,14 @@ document.querySelector(".close").addEventListener("click", (e) => {
     document.querySelector("dialog").close();
 });
 
+document.addEventListener("click", (e) => {
+    if (document.querySelector("dialog").open) {
+        if (e.target === document.querySelector("dialog")) {
+            document.querySelector("dialog").close();
+        }
+    }
+});
+
 function clearDisplay(display) {
     while(display.lastElementChild) {
         display.removeChild(display.lastElementChild);
