@@ -12,6 +12,18 @@ document.addEventListener("click", (e) => {
     }
 });
 
+function setBackground(data) {
+    let hour = Number(data.slice(0,2));
+    let body = document.querySelector("body");
+    if (hour >= 6 && hour < 13) {
+        body.setAttribute("id", "morning");
+    } else if (hour >= 13 && hour < 20) {
+        body.setAttribute("id", "afternoon");
+    } else {
+        body.setAttribute("id", "night");
+    }
+};
+
 function clearDisplay(display) {
     while(display.lastElementChild) {
         display.removeChild(display.lastElementChild);
@@ -132,6 +144,7 @@ async function createWeatherDOM(data) {
 
 async function setDisplay(data) {
     clearDisplay(document.querySelector("#weatherCardDisplay"));
+    setBackground(data.currentConditions.datetime);
 
     for (const day of data.days.slice(0, 7)) { //get only next 7 days
         let dayData = parseWeatherData(day);

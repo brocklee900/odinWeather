@@ -4,12 +4,29 @@
     margin: 0px;
     padding: 0px;
 }
-/*
-body {
-    background-color: rgb(13, 36, 167);
+
+body#night > dialog,
+body#night > #weatherCardDisplay > .weatherCard {
     color: white;
+    background: linear-gradient(to left top, rgb(40, 0, 134), rgb(0, 0, 204));
+    border-color: black;
 }
-    */
+
+body#morning > dialog,
+body#morning > #weatherCardDisplay > .weatherCard {
+    color: black;
+    background: linear-gradient(to left top, rgb(0, 119, 255), rgb(62, 168, 255));
+    border-color: black;
+}
+
+body#afternoon > dialog,
+body#afternoon > #weatherCardDisplay > .weatherCard {
+    color: black;
+    background: linear-gradient(to left top, rgb(218, 87, 0), rgb(255, 166, 0));
+    border-color: black;
+}
+
+
 
 .error {
     color: red;
@@ -66,11 +83,12 @@ body {
 dialog {
     width: 80%;
     height: 40%;
+    min-height: 300px;
     position: absolute;
-    background-color: blue;
 
     top: 50%;
-    transform: translate(0%, -50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     padding: 15px 35px;
 }
@@ -87,10 +105,8 @@ dialog > .close {
 #weatherStats {
     display: flex;
     flex-direction: column;
-}
-
-#weatherStats {
     font-size: 1.75rem;
+    gap: 20px;
 }
 
 #weatherStats > .header {
