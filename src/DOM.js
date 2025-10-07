@@ -119,6 +119,50 @@ async function displayActiveCard(data) {
     document.querySelector("dialog").showModal();
 };
 
+async function displayCurrentCard(data) {
+    const activeDisplay = document.querySelector("#weatherStats");
+    clearDisplay(activeDisplay);
+
+    //Header
+    let header = createElement("div", "", "header", activeDisplay);
+
+    await createIcon(data.get("icon"), header);
+
+    let dateDiv = createElement("div", "", "date", header);
+    let parsedDate = parse(data.get("date"), 'yyyy-MM-dd', new Date());
+    createElement("h1", "Now", undefined, dateDiv);
+    createElement("p", data.get("datetime"), undefined, dateDiv);
+    createElement("p", format(parsedDate, 'LLLL do, yyyy'), undefined, dateDiv);
+
+    createElement("p", data.get("description"), "description", header);
+
+    //Content
+    let content = createElement("div", "", "content", activeDisplay);
+
+    let stat = createElement("div", "", "stat", content);
+    await createIcon("thermometer-low", stat);
+    let tempDiv = createElement("div", "", "temp", stat);
+    createElement("p", `${data.get("tempCurrent")}°F`, undefined, tempDiv);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("weather-windy", stat);
+    createElement("p", `Wind: ${data.get("windspeed")}mph`, undefined, stat);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("water-alert-outline", stat);
+    createElement("p", `Chance of Rain: ${data.get("rainChance")}%`, undefined, stat);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("cloud-outline", stat);
+    createElement("p", `Cloud Coverage: ${data.get("cloudcover")}%`, undefined, stat);
+
+    stat = createElement("div", "", "stat", content);
+    await createIcon("water-percent", stat);
+    createElement("p", `Humidity: ${data.get("humidity")}%`, undefined, stat);
+
+    document.querySelector("dialog").showModal();
+};
+
 async function createWeatherDOM(data) {
 
     const weatherCard = createElement("div", "", "weatherCard", 
@@ -139,12 +183,42 @@ async function createWeatherDOM(data) {
     weatherCard.addEventListener("click", (e) => {
         displayActiveCard(data);
     })
-
 };
+
+async function createCurrentWeatherDOM(data) {
+    const weatherCard = createElement("div", "", "weatherCard", 
+        document.querySelector("#weatherCardDisplay"));
+
+    await createIcon(data.get("icon"), weatherCard);
+
+    createElement("p", "Now", "day", weatherCard);
+    createElement("p", data.get("datetime"), "datetime", weatherCard);
+
+    let tempDiv = createElement("div", "", "temp", weatherCard);
+    createElement("p", `${data.get("tempCurrent")}°F`, undefined, tempDiv);
+
+    createElement("p", data.get("conditions"), "conditions", weatherCard);
+
+    weatherCard.addEventListener("click", (e) => {
+        displayCurrentCard(data);
+    })
+}
+
+async function parseDataNow(data) {
+    console.log(data);
+    let conditions = parseWeatherData(data.currentConditions);
+    conditions.set("date", data.days[0].datetime);
+    conditions.set("description", data.description);
+    await createCurrentWeatherDOM(conditions);
+}
 
 async function setDisplay(data) {
     clearDisplay(document.querySelector("#weatherCardDisplay"));
     setBackground(data.currentConditions.datetime);
+
+    parseDataNow(data);
+
+
 
     for (const day of data.days.slice(0, 7)) { //get only next 7 days
         let dayData = parseWeatherData(day);
