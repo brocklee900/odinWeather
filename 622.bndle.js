@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkodinweather=self.webpackChunkodinweather||[]).push([[622],{622:(e,d,s)=>{e.exports=s.p+"d0397c88d5d1bbadb2d8.svg"}}]);
